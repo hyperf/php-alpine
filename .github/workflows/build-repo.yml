@@ -6,6 +6,10 @@ env:
   APORTS_SCRIPTS: /home/sandbox/scripts
   APK_MAINTAINER: ${{ secrets.APK_MAINTAINER }}
   APK_PACKAGER: ${{ secrets.APK_PACKAGER }}
+  QSHELL_VERSION: "v2.6.0"
+  QINIU_ACCESS_KEY: ${{ secrets.QINIU_ACCESS_KEY }}
+  QINIU_SECRET_KEY: ${{ secrets.QINIU_SECRET_KEY }}
+  QINIU_BUCKET: ${{ secrets.QINIU_BUCKET }}
 on:
   push:
     branches:
@@ -115,8 +119,14 @@ jobs:
           path: ${{ env.PA_BUILD_PATH }}
 
       # publish to bintray.
-      - name: bintray
+      - name: publish to qiniu
         if: github.ref == 'refs/heads/publish'
         run: |
-          echo -e "Publishing to Bintray"
-          ./publish-zip.sh
+          echo -e "Publishing to Qiniu"
+          curl -SL https://github.com/qiniu/qshell/releases/download/${QSHELL_VERSION}/qshell-v2.6.0-linux-amd64.tar.gz -o qshell.tar.gz
+          tar -xf qshell.tar.gz
+          chmod u+x qshell
+          ./qshell account ${QINIU_ACCESS_KEY} ${QINIU_SECRET_KEY} hyperf
+          sudo cp -rf repo/v${ALPINE_VERSION}/php-${PHP_VERSION} repo/v${ALPINE_VERSION}/php-${PHP_MINOR_VERSION}
+          ./qshell qupload2 --src-dir=repo/v${ALPINE_VERSION} --bucket ${QINIU_BUCKET} --overwrite --key-prefix v${ALPINE_VERSION}/ --up-host https://upload.qbox.me/
+
