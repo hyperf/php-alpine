@@ -128,5 +128,5 @@ jobs:
           chmod u+x qshell
           ./qshell account ${QINIU_ACCESS_KEY} ${QINIU_SECRET_KEY} hyperf
           sudo cp -rf repo/v${ALPINE_VERSION}/php-${PHP_VERSION} repo/v${ALPINE_VERSION}/php-${PHP_MINOR_VERSION}
-          ./qshell qupload2 --src-dir=repo/v${ALPINE_VERSION} --bucket ${QINIU_BUCKET} --overwrite --key-prefix v${ALPINE_VERSION}/ --up-host https://upload.qbox.me/
+          ./qshell qupload2 --src-dir=repo/v${ALPINE_VERSION} --bucket ${QINIU_BUCKET} --overwrite --key-prefix v${ALPINE_VERSION}/ --up-host https://upload-cn-east-2.qiniup.com
 
