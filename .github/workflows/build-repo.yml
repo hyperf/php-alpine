@@ -6,10 +6,11 @@ env:
   APORTS_SCRIPTS: /home/sandbox/scripts
   APK_MAINTAINER: ${{ secrets.APK_MAINTAINER }}
   APK_PACKAGER: ${{ secrets.APK_PACKAGER }}
-  QSHELL_VERSION: "v2.6.0"
+  QSHELL_VERSION: "v2.6.1"
   QINIU_ACCESS_KEY: ${{ secrets.QINIU_ACCESS_KEY }}
   QINIU_SECRET_KEY: ${{ secrets.QINIU_SECRET_KEY }}
   QINIU_BUCKET: ${{ secrets.QINIU_BUCKET }}
+  QINIU_CDN_BASE_URI: ${{ secrets.QINIU_CDN_BASE_URI }}
 on:
   push:
     branches:
@@ -40,25 +41,25 @@ jobs:
           # alpine-v3.12-php-8.0
           - alpine: "3.12"
             php: "8.0"
-            release: "8.0.6"
+            release: "8.0.7"
             arch: "x86_64"
 
           # alpine-v3.12-php-7.4
           - alpine: "3.12"
             php: "7.4"
-            release: "7.4.19"
+            release: "7.4.20"
             arch: "x86_64"
 
           # alpine-v3.11-php-8.0
           - alpine: "3.11"
             php: "8.0"
-            release: "8.0.6"
+            release: "8.0.7"
             arch: "x86_64"
 
           # alpine-v3.11-php-7.4
           - alpine: "3.11"
             php: "7.4"
-            release: "7.4.19"
+            release: "7.4.20"
             arch: "x86_64"
 
           # alpine-v3.11-php-7.3
@@ -70,7 +71,7 @@ jobs:
           # alpine-v3.10-php-7.4
           - alpine: "3.10"
             php: "7.4"
-            release: "7.4.19"
+            release: "7.4.20"
             arch: "x86_64"
 
           # alpine-v3.10-php-7.3
@@ -123,10 +124,13 @@ jobs:
         if: github.ref == 'refs/heads/publish'
         run: |
           echo -e "Publishing to Qiniu"
-          curl -SL https://github.com/qiniu/qshell/releases/download/${QSHELL_VERSION}/qshell-v2.6.0-linux-amd64.tar.gz -o qshell.tar.gz
+          curl -SL https://github.com/qiniu/qshell/releases/download/${QSHELL_VERSION}/qshell-${QSHELL_VERSION}-linux-amd64.tar.gz -o qshell.tar.gz
           tar -xf qshell.tar.gz
           chmod u+x qshell
           ./qshell account ${QINIU_ACCESS_KEY} ${QINIU_SECRET_KEY} hyperf
           sudo cp -rf repo/v${ALPINE_VERSION}/php-${PHP_VERSION} repo/v${ALPINE_VERSION}/php-${PHP_MINOR_VERSION}
           ./qshell qupload2 --src-dir=repo/v${ALPINE_VERSION} --bucket ${QINIU_BUCKET} --overwrite --key-prefix v${ALPINE_VERSION}/ --up-host https://upload-cn-east-2.qiniup.com
+          echo ${QINIU_CDN_BASE_URI}/${ALPINE_VERSION_SLUG}/${PHP_VERSION_SLUG}/${PA_ARCH}/APKINDEX.tar.gz > refresh.txt
+          ./qshell cdnrefresh -i refresh.txt
+
 
