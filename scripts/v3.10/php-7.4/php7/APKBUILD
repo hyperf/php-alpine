@@ -7,7 +7,7 @@ pkgname=php7
 srcdir="/tmp/src-$pkgname"
 pkgbasedir="/tmp/pkg-$pkgname"
 _pkgreal=php
-pkgver=7.4.20
+pkgver=7.4.21
 pkgrel=1
 pkgdesc="The PHP language runtime engine - 7th branch"
 url="http://www.php.net/"
@@ -356,7 +356,7 @@ _package_ext() {
 		> "$subpkgdir"/etc/$pkgname/conf.d/${elo}_${extname}.ini
 }
 
-sha512sums="c713e143896cfd7d48f78156c71a2b7488ada29cdfc94181e704d2e11f7235062b1dd2a9e36ad2a3e2138c308d988229203f031cd9ee66431695dc8fe1a950b3  php-7.4.20.tar.bz2
+sha512sums="ff917b6d7706143c191f1eb72918d464731999533a1dba04db44198fc0ef55617670e5c6b49372837a74f66c4cf758030f033e90f033447b9b0e038566406706  php-7.4.21.tar.bz2
 5b45e3f76579c064e7393a080584515d4c70071cd028cd9292885c741ddc78731633082cf1808b34bbe2e54575caa4c6fcfb3da05f54a26f0848a5e1709492ac  php7-fpm.initd
 100434b8cecaa01a86cc8be56434db1c2dd3c49b7ae397a58b8ecad06a4eb5453e05412e20df1fa26468d6df6c4260f7c3c2b4b4c6f099ffec006bcc0c29cc3c  php7-fpm.logrotate
 7893c2c4507191ce39fa0813c0119ccb8394dbc5ec0092faea34d6494459c697f70536f19a4c7b767aa1a8c587fe49768b552e3b55a1fc11a1e66f267e0b605e  php7-module.conf
